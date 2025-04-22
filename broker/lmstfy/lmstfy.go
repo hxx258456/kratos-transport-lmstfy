@@ -134,6 +134,7 @@ func (b *lmstfyBroker) Subscribe(topic string, handler broker.Handler, binder br
 	options := broker.SubscribeOptions{
 		Context: context.Background(),
 		Queue:   topic,
+		AutoAck: true,
 	}
 
 	for _, o := range opts {
@@ -141,7 +142,6 @@ func (b *lmstfyBroker) Subscribe(topic string, handler broker.Handler, binder br
 	}
 	ttr := getTTR(options.Context)
 	timeout := getTimeout(options.Context)
-
 	if ttr <= 0 {
 		return nil, errors.New("ttr must be greater than 0")
 	}

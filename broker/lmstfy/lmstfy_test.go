@@ -91,6 +91,7 @@ func Test_Subscribe_WithRawData(t *testing.T) {
 		nil,
 		WithTTR(3),
 		WithTimeout(10),
+		broker.DisableAutoAck(),
 	)
 	assert.Nil(t, err)
 

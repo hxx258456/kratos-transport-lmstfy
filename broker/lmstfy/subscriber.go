@@ -1,7 +1,6 @@
 package lmstfy
 
 import (
-	"fmt"
 	"github.com/bitleak/lmstfy/client"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/tx7do/kratos-transport/broker"
@@ -39,17 +38,16 @@ func (c *subscriber) Start() {
 		case <-c.done:
 			return
 		default:
-			fmt.Println("接收消息中")
 			job, err := c.client.Consume(c.topic, c.ttr, c.timeout)
 			if err != nil {
 				log.Error(err)
 				time.Sleep(time.Second * 5)
 				continue
 			}
+
 			if job == nil {
 				continue
 			}
-			fmt.Println(job)
 			var msg broker.Message
 			var p *publication
 			if c.binder != nil {
@@ -62,7 +60,7 @@ func (c *subscriber) Start() {
 				continue
 			}
 
-			if err := broker.Unmarshal(c.b.options.Codec, job.Data, &msg); err != nil {
+			if err := broker.Unmarshal(c.b.options.Codec, job.Data, &msg.Body); err != nil {
 				continue
 			}
 
