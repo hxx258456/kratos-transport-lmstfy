@@ -44,7 +44,6 @@ func (c *subscriber) Start() {
 				time.Sleep(time.Second * 5)
 				continue
 			}
-
 			if job == nil {
 				continue
 			}

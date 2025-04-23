@@ -131,11 +131,7 @@ func (b *lmstfyBroker) Publish(ctx context.Context, topic string, msg broker.Any
 }
 
 func (b *lmstfyBroker) Subscribe(topic string, handler broker.Handler, binder broker.Binder, opts ...broker.SubscribeOption) (broker.Subscriber, error) {
-	options := broker.SubscribeOptions{
-		Context: context.Background(),
-		Queue:   topic,
-		AutoAck: true,
-	}
+	options := broker.NewSubscribeOptions()
 
 	for _, o := range opts {
 		o(&options)
