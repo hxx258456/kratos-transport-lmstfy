@@ -132,10 +132,10 @@ func (b *lmstfyBroker) Publish(ctx context.Context, topic string, msg broker.Any
 
 func (b *lmstfyBroker) Subscribe(topic string, handler broker.Handler, binder broker.Binder, opts ...broker.SubscribeOption) (broker.Subscriber, error) {
 	options := broker.NewSubscribeOptions()
-
 	for _, o := range opts {
 		o(&options)
 	}
+	c := client.NewLmstfyClient(b.host, b.port, b.namespace, b.token)
 	ttr := getTTR(options.Context)
 	timeout := getTimeout(options.Context)
 	if ttr <= 0 {
@@ -148,7 +148,7 @@ func (b *lmstfyBroker) Subscribe(topic string, handler broker.Handler, binder br
 
 	cons := &subscriber{
 		topic:   topic,
-		client:  b.client,
+		client:  c,
 		handler: handler,
 		b:       b,
 		options: options,
@@ -160,7 +160,6 @@ func (b *lmstfyBroker) Subscribe(topic string, handler broker.Handler, binder br
 	b.Lock()
 	b.subscribers.Add(topic, cons)
 	b.Unlock()
-
 	go cons.Start()
 
 	return cons, nil

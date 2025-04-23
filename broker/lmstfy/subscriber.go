@@ -47,6 +47,7 @@ func (c *subscriber) Start() {
 			if job == nil {
 				continue
 			}
+
 			var msg broker.Message
 			var p *publication
 			if c.binder != nil {
@@ -62,7 +63,6 @@ func (c *subscriber) Start() {
 			if err := broker.Unmarshal(c.b.options.Codec, job.Data, &msg.Body); err != nil {
 				continue
 			}
-
 			p = &publication{
 				client:    c.client,
 				lmstfyMsg: job,
